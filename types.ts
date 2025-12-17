@@ -26,6 +26,14 @@ export interface ActorConfig {
   scale: [number, number, number];
 }
 
+export interface WeatherSettings {
+  timeOfDay: number; // 0-24
+  azimuth: number; // 0-360
+  cloudCover: number; // 0-1
+  fogDensity: number; // 0-0.1
+  fogColor: string; // hex
+}
+
 export interface SimulationState {
   environment: EnvironmentType;
   actorCounts: Record<ActorCategory, number>;

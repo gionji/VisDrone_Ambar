@@ -152,7 +152,7 @@ export const ActorManager: React.FC<{
       const category = parseInt(catStr) as ActorCategory;
       const def = ACTOR_DEFINITIONS[category];
       
-      for (let i = 0; i < count; i++) {
+      for (let i = 0; i < (count as number); i++) {
         const x = (Math.random() - 0.5) * (WORLD_SIZE - 5);
         const z = (Math.random() - 0.5) * (WORLD_SIZE - 5);
         
