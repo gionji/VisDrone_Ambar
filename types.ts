@@ -24,6 +24,8 @@ export interface ActorConfig {
   velocity: [number, number, number];
   color: string;
   scale: [number, number, number];
+  variant: number; // 0, 1, 2... for random variations
+  modelPath?: string; // Path to .glb file if available
 }
 
 export interface WeatherSettings {

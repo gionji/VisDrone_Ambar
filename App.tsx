@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Activity, Box, Map, TreePine, Building2, User, RotateCcw, Sun, Cloud, Wind, Dice5, ChevronDown, ChevronRight } from 'lucide-react';
+import { Activity, Box, Map, TreePine, Building2, User, RotateCcw, Sun, Cloud, Wind, Dice5, ChevronDown, ChevronRight, Upload, FileUp } from 'lucide-react';
 import { EnvironmentType, ActorCategory, WeatherSettings } from './types';
 import { Scene } from './components/Scene';
 import { ACTOR_DEFINITIONS } from './constants';
@@ -67,6 +67,10 @@ const App: React.FC = () => {
   const [weather, setWeather] = useState<WeatherSettings>(INITIAL_WEATHER);
   const [seed, setSeed] = useState<number>(0);
   
+  // Custom Assets State: Maps Category ID -> Array of Blob URLs
+  const [customModels, setCustomModels] = useState<Record<number, string[]>>({});
+  const [uploadCategory, setUploadCategory] = useState<string>(ActorCategory.Car.toString());
+
   // State for the accordion. Default 'scenario' open.
   const [activeTab, setActiveTab] = useState<string | null>('scenario');
 
@@ -83,6 +87,30 @@ const App: React.FC = () => {
 
   const handleWeatherChange = (key: keyof WeatherSettings, value: number | string) => {
     setWeather(prev => ({ ...prev, [key]: value }));
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Create a Blob URL for the uploaded file
+    const url = URL.createObjectURL(file);
+    const catId = parseInt(uploadCategory);
+
+    setCustomModels(prev => {
+        const existing = prev[catId] || [];
+        return {
+            ...prev,
+            [catId]: [...existing, url]
+        };
+    });
+
+    // Reset input
+    event.target.value = '';
+    
+    // Trigger regeneration to apply new models immediately to new actors or via reset
+    // Optional: we could just let the next spawn pick it up
+    alert(`Modello ${file.name} caricato per la categoria ${ACTOR_DEFINITIONS[catId as ActorCategory].label}. Clicca "Rigenera Procedurale" o aggiungi nuovi attori per vederlo.`);
   };
 
   const resetCounts = () => setActorCounts(INITIAL_COUNTS);
@@ -237,8 +265,75 @@ const App: React.FC = () => {
                     </div>
                 </div>
             </SidebarSection>
+            
+            {/* 3. UPLOAD / IMPORT ASSETS SECTION */}
+            <SidebarSection 
+                id="import" 
+                title="Importa Asset 3D" 
+                icon={Upload} 
+                isOpen={activeTab === 'import'} 
+                onToggle={() => toggleTab('import')}
+            >
+                <div className="flex flex-col gap-3">
+                    <div className="text-[10px] text-slate-400 leading-relaxed">
+                        Carica file <b>.glb</b> o <b>.gltf</b> dal tuo computer. Verranno usati casualmente per la categoria selezionata.
+                    </div>
 
-            {/* 3. VISUALIZATION SECTION */}
+                    <div className="flex flex-col gap-1">
+                        <label className="text-[10px] font-bold text-slate-300">CATEGORIA DESTINAZIONE</label>
+                        <select 
+                            value={uploadCategory} 
+                            onChange={(e) => setUploadCategory(e.target.value)}
+                            className="w-full bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded p-2 focus:border-blue-500 focus:outline-none"
+                        >
+                            {Object.entries(ACTOR_DEFINITIONS).map(([key, def]) => (
+                                <option key={key} value={key}>{def.label}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="relative group">
+                         <label 
+                            htmlFor="file-upload" 
+                            className="flex items-center justify-center gap-2 w-full p-3 border border-dashed border-slate-600 rounded-lg bg-slate-800/50 hover:bg-slate-800 hover:border-blue-500 cursor-pointer transition-all group-hover:text-blue-400 text-slate-400 text-xs"
+                        >
+                            <FileUp className="w-4 h-4" />
+                            <span>Seleziona File (.glb)</span>
+                         </label>
+                         <input 
+                            id="file-upload" 
+                            type="file" 
+                            accept=".glb,.gltf" 
+                            onChange={handleFileUpload}
+                            className="hidden" 
+                        />
+                    </div>
+
+                    {/* Show stats of uploaded models */}
+                    <div className="mt-2 border-t border-slate-700 pt-2">
+                        <div className="text-[10px] font-bold text-slate-500 mb-1">ASSET PERSONALIZZATI</div>
+                        {Object.keys(customModels).length === 0 ? (
+                            <div className="text-[10px] text-slate-600 italic">Nessun modello caricato</div>
+                        ) : (
+                            <div className="flex flex-wrap gap-1">
+                                {Object.entries(customModels).map(([catId, urls]) => {
+                                    const count = (urls as string[]).length;
+                                    if(count === 0) return null;
+                                    const def = ACTOR_DEFINITIONS[parseInt(catId) as ActorCategory];
+                                    return (
+                                        <div key={catId} className="text-[9px] bg-slate-800 border border-slate-700 text-slate-300 px-1.5 py-0.5 rounded flex items-center gap-1">
+                                            <div className="w-1.5 h-1.5 rounded-full" style={{backgroundColor: def.color}}></div>
+                                            {def.label}: {count}
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </SidebarSection>
+
+            {/* 4. VISUALIZATION SECTION */}
             <SidebarSection 
                 id="visual" 
                 title="Visualizzazione" 
@@ -262,7 +357,7 @@ const App: React.FC = () => {
                 </label>
             </SidebarSection>
 
-            {/* 4. ACTORS SECTION */}
+            {/* 5. ACTORS SECTION */}
             <SidebarSection 
                 id="actors" 
                 title="Attori (VisDrone)" 
@@ -319,6 +414,7 @@ const App: React.FC = () => {
             showBoundingBoxes={showBoundingBoxes}
             weather={weather}
             seed={seed}
+            customAssets={customModels}
          />
       </main>
 

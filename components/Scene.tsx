@@ -12,9 +12,10 @@ interface SceneProps {
   showBoundingBoxes: boolean;
   weather: WeatherSettings;
   seed: number;
+  customAssets?: Record<number, string[]>; // Map category ID to list of Blob URLs
 }
 
-export const Scene: React.FC<SceneProps> = ({ environment, actorCounts, showBoundingBoxes, weather, seed }) => {
+export const Scene: React.FC<SceneProps> = ({ environment, actorCounts, showBoundingBoxes, weather, seed, customAssets }) => {
   
   // Calculate Sun Position based on Time of Day (0-24) and Azimuth (0-360)
   const sunPosition = useMemo(() => {
@@ -94,7 +95,8 @@ export const Scene: React.FC<SceneProps> = ({ environment, actorCounts, showBoun
           <ActorManager 
             counts={actorCounts} 
             environmentType={environment} 
-            showBoundingBoxes={showBoundingBoxes} 
+            showBoundingBoxes={showBoundingBoxes}
+            customAssets={customAssets}
           />
 
           {/* Controls */}

@@ -1,5 +1,6 @@
 import { ActorCategory } from './types';
 
+// Definition of basic properties
 export const ACTOR_DEFINITIONS: Record<ActorCategory, { label: string; color: string; scale: [number, number, number]; speed: number }> = {
   [ActorCategory.Pedestrian]: { label: 'Pedestrian', color: '#3b82f6', scale: [0.5, 1.7, 0.5], speed: 1.5 },
   [ActorCategory.People]: { label: 'People', color: '#60a5fa', scale: [0.5, 1.7, 0.5], speed: 1.2 },
@@ -11,6 +12,24 @@ export const ACTOR_DEFINITIONS: Record<ActorCategory, { label: string; color: st
   [ActorCategory.AwningTricycle]: { label: 'Awning Tri', color: '#fbbf24', scale: [1.2, 1.8, 2.2], speed: 3.5 },
   [ActorCategory.Bus]: { label: 'Bus', color: '#ec4899', scale: [3.0, 3.5, 10.0], speed: 6.0 },
   [ActorCategory.Motor]: { label: 'Motor', color: '#14b8a6', scale: [0.8, 1.5, 2.0], speed: 8.0 },
+};
+
+// *** ASSET LIBRARY CONFIGURATION ***
+// To use real models:
+// 1. Place your .glb/.gltf files in the 'public/models/' folder of your project.
+// 2. Add the filenames here.
+// 3. The simulator will randomly pick one of these for each spawned actor.
+export const ASSET_LIBRARY: Record<ActorCategory, string[]> = {
+  [ActorCategory.Pedestrian]: [], // e.g. ['/models/human_1.glb', '/models/human_2.glb']
+  [ActorCategory.People]: [],
+  [ActorCategory.Bicycle]: [],
+  [ActorCategory.Car]: [],        // e.g. ['/models/sedan.glb', '/models/suv.glb']
+  [ActorCategory.Van]: [],
+  [ActorCategory.Truck]: [],
+  [ActorCategory.Tricycle]: [],
+  [ActorCategory.AwningTricycle]: [],
+  [ActorCategory.Bus]: [],
+  [ActorCategory.Motor]: [],
 };
 
 export const WORLD_SIZE = 100;
