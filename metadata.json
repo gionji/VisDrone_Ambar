@@ -1,0 +1,5 @@
+{
+  "name": "VisDrone 3D Simulator",
+  "description": "A 3D simulation environment for VisDrone categories with dynamic terrain generation (Urban, Country, Winter) and YOLO-style 2D bounding box overlays.",
+  "requestFramePermissions": []
+}
