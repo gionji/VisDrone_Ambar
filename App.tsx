@@ -108,9 +108,7 @@ const App: React.FC = () => {
     // Reset input
     event.target.value = '';
     
-    // Trigger regeneration to apply new models immediately to new actors or via reset
-    // Optional: we could just let the next spawn pick it up
-    alert(`Modello ${file.name} caricato per la categoria ${ACTOR_DEFINITIONS[catId as ActorCategory].label}. Clicca "Rigenera Procedurale" o aggiungi nuovi attori per vederlo.`);
+    alert(`Model ${file.name} uploaded for category ${ACTOR_DEFINITIONS[catId as ActorCategory].label}. Click "Regenerate Procedural" or add new actors to see it.`);
   };
 
   const resetCounts = () => setActorCounts(INITIAL_COUNTS);
@@ -128,7 +126,7 @@ const App: React.FC = () => {
                 <Activity className="w-5 h-5" />
                 VisDrone Sim
             </h1>
-            <p className="text-[10px] text-slate-500 mt-1 uppercase tracking-widest">Generatore Sintetico</p>
+            <p className="text-[10px] text-slate-500 mt-1 uppercase tracking-widest">Synthetic Generator</p>
         </div>
 
         {/* Scrollable Content Area */}
@@ -146,9 +144,9 @@ const App: React.FC = () => {
                      <button 
                         onClick={regenerateMap} 
                         className="flex items-center gap-2 text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white px-3 py-1.5 rounded-md border border-slate-700 transition-colors w-full justify-center"
-                        title="Rigenera posizione procedurale"
+                        title="Regenerate procedural positions"
                     >
-                        <Dice5 className="w-3 h-3" /> Rigenera Procedurale
+                        <Dice5 className="w-3 h-3" /> Regenerate Procedural
                     </button>
                 </div>
 
@@ -159,8 +157,8 @@ const App: React.FC = () => {
                     >
                         <Building2 className="w-5 h-5" />
                         <div className="text-left">
-                            <div className="font-medium text-sm">Urbano</div>
-                            <div className="text-[10px] opacity-60">Città, strade, palazzi</div>
+                            <div className="font-medium text-sm">Urban</div>
+                            <div className="text-[10px] opacity-60">City, streets, buildings</div>
                         </div>
                     </button>
                     
@@ -170,8 +168,8 @@ const App: React.FC = () => {
                     >
                         <TreePine className="w-5 h-5" />
                         <div className="text-left">
-                            <div className="font-medium text-sm">Campagna</div>
-                            <div className="text-[10px] opacity-60">Natura, vegetazione</div>
+                            <div className="font-medium text-sm">Country</div>
+                            <div className="text-[10px] opacity-60">Nature, vegetation</div>
                         </div>
                     </button>
 
@@ -181,8 +179,8 @@ const App: React.FC = () => {
                     >
                         <Box className="w-5 h-5" />
                         <div className="text-left">
-                            <div className="font-medium text-sm">Inverno</div>
-                            <div className="text-[10px] opacity-60">Neve, colline</div>
+                            <div className="font-medium text-sm">Winter</div>
+                            <div className="text-[10px] opacity-60">Snow, hills</div>
                         </div>
                     </button>
                 </div>
@@ -191,7 +189,7 @@ const App: React.FC = () => {
              {/* 2. WEATHER SECTION */}
              <SidebarSection 
                 id="weather" 
-                title="Meteo & Orario" 
+                title="Weather & Time" 
                 icon={Sun} 
                 isOpen={activeTab === 'weather'} 
                 onToggle={() => toggleTab('weather')}
@@ -201,7 +199,7 @@ const App: React.FC = () => {
                     {/* Time of Day */}
                     <div>
                         <div className="flex justify-between text-[11px] mb-2 text-slate-400 font-medium">
-                            <span>ORA DEL GIORNO</span>
+                            <span>TIME OF DAY</span>
                             <span className="text-blue-300 bg-blue-900/30 px-1.5 rounded">{weather.timeOfDay.toFixed(1)}h</span>
                         </div>
                         <input 
@@ -215,7 +213,7 @@ const App: React.FC = () => {
                     {/* Sun Azimuth */}
                     <div>
                         <div className="flex justify-between text-[11px] mb-2 text-slate-400 font-medium">
-                            <span>POSIZIONE SOLE</span>
+                            <span>SUN AZIMUTH</span>
                             <span className="text-slate-300">{weather.azimuth}°</span>
                         </div>
                         <input 
@@ -229,7 +227,7 @@ const App: React.FC = () => {
                     {/* Cloud Cover */}
                     <div>
                          <div className="flex justify-between text-[11px] mb-2 text-slate-400 font-medium items-center">
-                            <span className="flex items-center gap-1"><Cloud className="w-3 h-3"/> NUVOLOSITÀ</span>
+                            <span className="flex items-center gap-1"><Cloud className="w-3 h-3"/> CLOUD COVER</span>
                             <span className="text-slate-300">{(weather.cloudCover * 100).toFixed(0)}%</span>
                         </div>
                         <input 
@@ -243,7 +241,7 @@ const App: React.FC = () => {
                     {/* Fog Density & Color */}
                     <div className="space-y-2">
                         <div className="flex justify-between text-[11px] text-slate-400 font-medium items-center">
-                            <span className="flex items-center gap-1"><Wind className="w-3 h-3"/> NEBBIA & ATMOSFERA</span>
+                            <span className="flex items-center gap-1"><Wind className="w-3 h-3"/> FOG & ATMOSPHERE</span>
                             <span className="text-slate-300">{(weather.fogDensity * 100).toFixed(0)}%</span>
                         </div>
                         <div className="flex gap-2 items-center">
@@ -269,18 +267,18 @@ const App: React.FC = () => {
             {/* 3. UPLOAD / IMPORT ASSETS SECTION */}
             <SidebarSection 
                 id="import" 
-                title="Importa Asset 3D" 
+                title="Import 3D Assets" 
                 icon={Upload} 
                 isOpen={activeTab === 'import'} 
                 onToggle={() => toggleTab('import')}
             >
                 <div className="flex flex-col gap-3">
                     <div className="text-[10px] text-slate-400 leading-relaxed">
-                        Carica file <b>.glb</b> o <b>.gltf</b> dal tuo computer. Verranno usati casualmente per la categoria selezionata.
+                        Upload <b>.glb</b> or <b>.gltf</b> files from your computer. They will be used randomly for the selected category.
                     </div>
 
                     <div className="flex flex-col gap-1">
-                        <label className="text-[10px] font-bold text-slate-300">CATEGORIA DESTINAZIONE</label>
+                        <label className="text-[10px] font-bold text-slate-300">TARGET CATEGORY</label>
                         <select 
                             value={uploadCategory} 
                             onChange={(e) => setUploadCategory(e.target.value)}
@@ -298,7 +296,7 @@ const App: React.FC = () => {
                             className="flex items-center justify-center gap-2 w-full p-3 border border-dashed border-slate-600 rounded-lg bg-slate-800/50 hover:bg-slate-800 hover:border-blue-500 cursor-pointer transition-all group-hover:text-blue-400 text-slate-400 text-xs"
                         >
                             <FileUp className="w-4 h-4" />
-                            <span>Seleziona File (.glb)</span>
+                            <span>Select File (.glb)</span>
                          </label>
                          <input 
                             id="file-upload" 
@@ -311,9 +309,9 @@ const App: React.FC = () => {
 
                     {/* Show stats of uploaded models */}
                     <div className="mt-2 border-t border-slate-700 pt-2">
-                        <div className="text-[10px] font-bold text-slate-500 mb-1">ASSET PERSONALIZZATI</div>
+                        <div className="text-[10px] font-bold text-slate-500 mb-1">CUSTOM ASSETS</div>
                         {Object.keys(customModels).length === 0 ? (
-                            <div className="text-[10px] text-slate-600 italic">Nessun modello caricato</div>
+                            <div className="text-[10px] text-slate-600 italic">No models uploaded</div>
                         ) : (
                             <div className="flex flex-wrap gap-1">
                                 {Object.entries(customModels).map(([catId, urls]) => {
@@ -336,13 +334,13 @@ const App: React.FC = () => {
             {/* 4. VISUALIZATION SECTION */}
             <SidebarSection 
                 id="visual" 
-                title="Visualizzazione" 
+                title="Visualization" 
                 icon={Box} 
                 isOpen={activeTab === 'visual'} 
                 onToggle={() => toggleTab('visual')}
             >
                 <label className="flex items-center justify-between p-3 bg-slate-800/40 rounded-lg border border-slate-700/50 cursor-pointer hover:bg-slate-800 transition-colors">
-                    <span className="text-xs font-medium text-slate-300">Overlay Bounding Box</span>
+                    <span className="text-xs font-medium text-slate-300">Bounding Box Overlay</span>
                     <div className="relative inline-block w-9 h-5 align-middle select-none transition duration-200 ease-in">
                         <input 
                             type="checkbox" 
@@ -360,7 +358,7 @@ const App: React.FC = () => {
             {/* 5. ACTORS SECTION */}
             <SidebarSection 
                 id="actors" 
-                title="Attori (VisDrone)" 
+                title="Actors (VisDrone)" 
                 icon={User} 
                 isOpen={activeTab === 'actors'} 
                 onToggle={() => toggleTab('actors')}
